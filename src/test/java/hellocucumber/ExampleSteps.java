@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -22,16 +23,25 @@ public class ExampleSteps {
 
     private WebDriver driver;
 
+//    @Before
+//    public void startBrowser() {
+//        System.setProperty("webdriver.chrome.driver", "C:/Tools/chromedriver.exe");
+//        System.setProperty("webdriver.http.factory", "jdk-http-client");
+//
+//        driver = new ChromeDriver();
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+//        ChromeOptions chromeOptions = new ChromeOptions();
+//        chromeOptions.addArguments("--remote-allow-origins=*");
+//
+//    }
+
     @Before
-    public void startBrowser() throws InterruptedException {
-        System.setProperty("webdriver.chrome.driver", "C:/Tools/chromedriver.exe");
-        System.setProperty("webdriver.http.factory", "jdk-http-client");
+    public void startBrowser(){
+        System.setProperty("webdriver.edge.driver", "C:/Tools/msedgedriver.exe");
 
-        driver = new ChromeDriver();
+
+        driver = new EdgeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--remote-allow-origins=*");
-
     }
 
     @Given("I am on the Google search page")

@@ -6,10 +6,14 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -19,15 +23,32 @@ import java.time.temporal.ChronoUnit;
 public class ShopSteps {
     private WebDriver driver;
 
-    @Before
-    public void startBrowser() throws InterruptedException {
-        System.setProperty("webdriver.chrome.driver", "C:/Tools/chromedriver.exe");
-        System.setProperty("webdriver.http.factory", "jdk-http-client");
+//    @Before
+//    public void startBrowser() throws InterruptedException {
+//        System.setProperty("webdriver.chrome.driver", "C:/Tools/chromedriver.exe");
+//        System.setProperty("webdriver.http.factory", "jdk-http-client");
+//
+//        driver = new ChromeDriver();
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+//        ChromeOptions chromeOptions = new ChromeOptions();
+//        chromeOptions.addArguments("--remote-allow-origins=*");
+//
+//    }
 
-        driver = new ChromeDriver();
+    @Before
+    public void startBrowser(){
+        System.setProperty("webdriver.edge.driver", "C:/Tools/msedgedriver.exe");
+
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setBrowserName("MicrosoftEdge");
+        capabilities.setPlatform(Platform.WINDOWS);
+        capabilities.setVersion("111.0.1661.51");
+
+        EdgeOptions edgeOptions = new EdgeOptions();
+        edgeOptions.setBinary("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe");
+
+        driver = new EdgeDriver(edgeOptions);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--remote-allow-origins=*");
 
     }
 
