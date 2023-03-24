@@ -13,6 +13,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -35,19 +37,38 @@ public class ShopSteps {
 //
 //    }
 
+//    @Before
+//    public void startBrowser(){
+//        System.setProperty("webdriver.edge.driver", "C:/Tools/msedgedriver.exe");
+//
+//        DesiredCapabilities capabilities = new DesiredCapabilities();
+//        capabilities.setBrowserName("MicrosoftEdge");
+//        capabilities.setPlatform(Platform.WINDOWS);
+//        capabilities.setVersion("111.0.1661.51");
+//
+//        EdgeOptions edgeOptions = new EdgeOptions();
+//        edgeOptions.setBinary("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe");
+//
+//        driver = new EdgeDriver(edgeOptions);
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+//
+//    }
+
+    /*TODO: Implement Firefox running*/
+
     @Before
     public void startBrowser(){
-        System.setProperty("webdriver.edge.driver", "C:/Tools/msedgedriver.exe");
+        System.setProperty("webdriver.gecko.driver", "C:/Tools/geckodriver.exe");
 
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setBrowserName("MicrosoftEdge");
-        capabilities.setPlatform(Platform.WINDOWS);
-        capabilities.setVersion("111.0.1661.51");
+//        DesiredCapabilities capabilities = new DesiredCapabilities();
+//        capabilities.setBrowserName("MicrosoftEdge");
+//        capabilities.setPlatform(Platform.WINDOWS);
+//        capabilities.setVersion("111.0.1661.51");
 
-        EdgeOptions edgeOptions = new EdgeOptions();
-        edgeOptions.setBinary("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe");
+        FirefoxOptions ffOptions = new FirefoxOptions();
+        ffOptions.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
 
-        driver = new EdgeDriver(edgeOptions);
+        driver = new FirefoxDriver(ffOptions);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
     }

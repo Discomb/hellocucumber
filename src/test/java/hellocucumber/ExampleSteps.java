@@ -35,14 +35,14 @@ public class ExampleSteps {
 //
 //    }
 
-    @Before
-    public void startBrowser(){
-        System.setProperty("webdriver.edge.driver", "C:/Tools/msedgedriver.exe");
-
-
-        driver = new EdgeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-    }
+//    @Before
+//    public void startBrowser(){
+//        System.setProperty("webdriver.edge.driver", "C:/Tools/msedgedriver.exe");
+//
+//
+//        driver = new EdgeDriver();
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+//    }
 
     @Given("I am on the Google search page")
     public void I_visit_google() {
@@ -64,8 +64,8 @@ public class ExampleSteps {
         new WebDriverWait(driver, duration).until((ExpectedCondition<Boolean>) d -> d.getTitle().toLowerCase().startsWith(titleStartsWith));
     }
 
-    @After
-    public void close(){
-        driver.quit();
-    }
+//    @After
+//    public void close(){
+//        driver.quit();
+//    }
 }
