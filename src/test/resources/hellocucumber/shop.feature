@@ -9,3 +9,8 @@ Feature: Shop admin page
     Given I am logged into shop admin page
     When I go through menu
     Then Every title has a header
+
+  Scenario: 03 - Check product stickers on the main page
+    Given I am on the main shop page
+    When I look on product images
+    Then I see that every product has only one sticker

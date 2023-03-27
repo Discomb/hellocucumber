@@ -75,6 +75,11 @@ public class ShopSteps {
             checkTitle();
     }
 
+    @Given("I am on the main shop page")
+    public void I_visit_shop_main_page(){
+        driver.get("http://localhost/litecart/");
+    }
+
     @When ("I go through menu")
     public List<WebElement> get_menu_elements(){
             List<WebElement> menuList = driver.findElements(By.cssSelector("div#sidebar li a"));
@@ -95,6 +100,34 @@ public class ShopSteps {
         element.submit();
 
     }
+
+    @When ("I look on product images")
+    public List<WebElement> get_products(){
+        List<WebElement> productList = driver.findElements(By.cssSelector("article.product"));
+
+        return productList;
+    }
+
+    @Then ("I see that every product has only one sticker")
+    public void check_stickers(){
+            List<WebElement> products = get_products();
+
+            for (int i = 0; i < products.size(); i++){
+                WebElement product = products.get(i);
+//                System.out.println(product.findElement(By.cssSelector("h4.name")).getText());
+//                System.out.println(product.findElement(By.cssSelector("div.sticker")).getText());
+
+//                                synchronized (driver){
+//                    try {driver.wait(3000); }
+//                catch (InterruptedException e) {
+//                    System.out.println(e.getMessage());
+//                }}
+
+                assert product.findElements(By.cssSelector("div.sticker")).size() == 1;
+            }
+
+    }
+
 
     @Then("I am logged in")
     public void checkTitle() {
