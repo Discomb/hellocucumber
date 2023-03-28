@@ -1,5 +1,7 @@
 package hellocucumber;
 
+import com.google.common.collect.Comparators;
+import com.google.common.collect.Ordering;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -12,6 +14,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShopSteps {
@@ -80,6 +83,15 @@ public class ShopSteps {
         driver.get("http://localhost/litecart/");
     }
 
+    @Given ("I am on the Countries tab of admin page")
+    public void I_visit_Countries_tab(){
+         login_admin();
+
+         driver.findElement(By.cssSelector("div#sidebar li[data-code ='countries'] a")).click();
+
+         assert driver.findElement(By.cssSelector("div.card-title")).getText().equals("Countries");
+    }
+
     @When ("I go through menu")
     public List<WebElement> get_menu_elements(){
             List<WebElement> menuList = driver.findElements(By.cssSelector("div#sidebar li a"));
@@ -106,6 +118,26 @@ public class ShopSteps {
         List<WebElement> productList = driver.findElements(By.cssSelector("article.product"));
 
         return productList;
+    }
+
+    @When ("I check sorting of the countries by name")
+    public List<WebElement> get_countries(){
+            List<WebElement> countriesList = driver.findElements(By.cssSelector(("form[name='countries_form'] tbody tr")));
+
+            return countriesList;
+    }
+
+    @Then ("Countries sorted by name from A to Z")
+    public void check_countries_sorting_by_name(){
+            List<WebElement> countriesList = get_countries();
+            List<String> countries = new ArrayList<>();
+
+            for (int i = 0; i < countriesList.size(); i++){
+                String country = countriesList.get(i).findElement(By.cssSelector("a.link")).getText();
+                countries.add(country);
+            }
+
+            assert Ordering.natural().isOrdered(countries);
     }
 
     @Then ("I see that every product has only one sticker")

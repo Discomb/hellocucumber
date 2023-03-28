@@ -14,3 +14,13 @@ Feature: Shop admin page
     Given I am on the main shop page
     When I look on product images
     Then I see that every product has only one sticker
+
+  Scenario: 04 - Check sorting of the Countries page
+    Given I am on the Countries tab of admin page
+    When I check sorting of the countries by name
+    Then Countries sorted by name from A to Z
+
+  Scenario: 05 - Check sorting of Zones in Countries with multiple zones
+    Given I am on the Countries tab of admin page
+    When I check if country has multiple zones
+    Then Zones in those countries are sorted by name from A to Z
