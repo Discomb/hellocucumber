@@ -122,9 +122,44 @@ public class ShopSteps {
 
     @When ("I check sorting of the countries by name")
     public List<WebElement> get_countries(){
-            List<WebElement> countriesList = driver.findElements(By.cssSelector(("form[name='countries_form'] tbody tr")));
+            List<WebElement> countriesList = driver.findElements(By.cssSelector((" tbody tr")));
+
+//        form[name='countries_form']
 
             return countriesList;
+    }
+
+    @When ("I check if country has multiple zones")
+    public List<WebElement> get_countries_with_zones(){
+            List<WebElement> countriesList = get_countries();
+            List<WebElement> countriesWithZones = new ArrayList<>();
+
+        for (int i = 0; i < countriesList.size(); i++) {
+            if (Integer.parseInt(countriesList.get(i).findElement(By.cssSelector("td.text-center")).getText()) > 0) {
+                countriesWithZones.add(countriesList.get(i));
+            }
+        }
+
+            return countriesWithZones;
+    }
+
+    @Then ("Zones in those countries are sorted by name from A to Z")
+    public void check_zones_sorting_by_name() {
+        List<WebElement> countriesList = get_countries_with_zones();
+
+        for (int i = 0; i < countriesList.size(); i++ ){
+            countriesList.get(i).findElement(By.cssSelector("a")).click();
+
+            List<WebElement> zonesList = driver.findElements(By.cssSelector("tbody input[.form-control]"));
+
+//            TODO: дописать проверку
+
+
+
+            I_visit_Countries_tab();
+        }
+
+
     }
 
     @Then ("Countries sorted by name from A to Z")
