@@ -25,6 +25,16 @@ Feature: Shop admin page
     When I check if country has multiple zones
     Then Zones in those countries are sorted by name from A to Z
 
+  Scenario: 06 - Check product names and prices
+    Given I am on the main shop page
+    When I check product attributes on the main page
+    Then The price and name are the same on the product page
+
+#  Scenario: 07 - Check prices styles
+#    Given I am on the main shop page
+#    When I check product attributes on the main page
+#    Then They have the same style on product page
+
 
 # TODO    Проверка открытия правильной страницы товара
 #  1. на главной  и странице товара совпадают текст названия

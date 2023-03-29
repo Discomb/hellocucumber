@@ -16,6 +16,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ShopSteps {
 
@@ -144,6 +145,22 @@ public class ShopSteps {
 
             return countriesWithZones;
     }
+
+//    @When ("I check product attributes on the main page")
+//    public List<Object> get_product_attributes(){
+//            List<WebElement>
+//        List<Object>
+//        TODO:
+//        1. Получаем список веб.элементов, которыый содержит всю нужную нам информацию о продукте
+//        2. Циклом из каждого элемента создаем объект класса Продукт и наполняем его данными.
+//        3. Возвращаем список объектов класса Продукт
+//
+//        return;
+//    }
+
+    @Then ("They are the same on the product page")
+//    TODO: вызываем конструктор продуктов и по каждому продукту ходим внутрь сравнивать заголовок и цены
+
 
     @Then ("Zones in those countries are sorted by name from A to Z")
     public void check_zones_sorting_by_name() {
