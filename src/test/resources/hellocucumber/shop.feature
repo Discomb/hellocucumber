@@ -24,3 +24,12 @@ Feature: Shop admin page
     Given I am on the Countries tab of admin page
     When I check if country has multiple zones
     Then Zones in those countries are sorted by name from A to Z
+
+
+# TODO    Проверка открытия правильной страницы товара
+#  1. на главной  и странице товара совпадают текст названия
+#    2. на главной и странице товара совпадают цены (обычная и акционная)
+#    3. Обычная — серая и зач. а акц. красная и жирная
+#    4. акционная крупнее
+#
+#    + проверить во всех браузерах

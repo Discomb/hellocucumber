@@ -130,13 +130,15 @@ public class ShopSteps {
     }
 
     @When ("I check if country has multiple zones")
-    public List<WebElement> get_countries_with_zones(){
+//    Отдаем стринговый список имен стран для последующего сравнения
+    public List<String> get_countries_with_zones(){
             List<WebElement> countriesList = get_countries();
-            List<WebElement> countriesWithZones = new ArrayList<>();
+            List<String> countriesWithZones = new ArrayList<>();
 
         for (int i = 0; i < countriesList.size(); i++) {
             if (Integer.parseInt(countriesList.get(i).findElement(By.cssSelector("td.text-center")).getText()) > 0) {
-                countriesWithZones.add(countriesList.get(i));
+                countriesWithZones.add(countriesList.get(i).findElement(By.cssSelector("a")).getText());
+//                System.out.println(countriesList.get(i).findElement(By.cssSelector("a")).getText());
             }
         }
 
@@ -145,20 +147,30 @@ public class ShopSteps {
 
     @Then ("Zones in those countries are sorted by name from A to Z")
     public void check_zones_sorting_by_name() {
-        List<WebElement> countriesList = get_countries_with_zones();
+        List<String> countriesList = get_countries_with_zones();
+        List<String> zonesNames = new ArrayList<>();
 
         for (int i = 0; i < countriesList.size(); i++ ){
-            countriesList.get(i).findElement(By.cssSelector("a")).click();
+//            DOM меняется при возврату к странице со странами, следовательно, вебэлемент сохраненный в списке уже устарел.
+//               Следовательно, можно не держать список вебэлементов, а держать список стринговых имен нужных стран
+//               И оттуда уже подстановкой названия находить на странице нужные элементы
 
-            List<WebElement> zonesList = driver.findElements(By.cssSelector("tbody input[.form-control]"));
+            driver.findElement(By.xpath("//a[contains(text(), '" + countriesList.get(i) +"')]")).click();
 
-//            TODO: дописать проверку
+            List<WebElement> zonesList = driver.findElements(By.cssSelector("tbody input[name*='name']"));
 
 
+            for (int j = 0 ; j < zonesList.size(); j++ ){
+                zonesNames.add(zonesList.get(j).getAttribute("value"));
+//                System.out.println(zonesList.get(j).getAttribute("value"));
+            }
 
-            I_visit_Countries_tab();
+            assert Ordering.natural().isOrdered(zonesNames);
+
+            zonesNames.clear();
+
+            driver.findElement(By.cssSelector("li[data-code*='countries'] a")).click();
         }
-
 
     }
 
