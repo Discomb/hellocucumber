@@ -146,17 +146,33 @@ public class ShopSteps {
             return countriesWithZones;
     }
 
-//    @When ("I check product attributes on the main page")
-//    public List<Object> get_product_attributes(){
-//            List<WebElement>
-//        List<Object>
+    @When ("I check product attributes on the main page")
+    public List<Product> get_product_attributes(){
+
 //        TODO:
+
+
 //        1. Получаем список веб.элементов, которыый содержит всю нужную нам информацию о продукте
+            List<WebElement> wlist = get_products();
+            List<Product> plist= new ArrayList<>();
+
 //        2. Циклом из каждого элемента создаем объект класса Продукт и наполняем его данными.
+            for (int i = 0; i < wlist.size(); i++){
+                Product product = new Product();
+                plist.add(product.makeProduct(wlist.get(i)));
+
+                System.out.println(product.name);
+                System.out.println(product.link);
+                System.out.println(product.originalPrice);
+                System.out.println(product.salePrice);
+
+            }
+
+
 //        3. Возвращаем список объектов класса Продукт
 //
-//        return;
-//    }
+        return plist;
+    }
 
     @Then ("They are the same on the product page")
 //    TODO: вызываем конструктор продуктов и по каждому продукту ходим внутрь сравнивать заголовок и цены

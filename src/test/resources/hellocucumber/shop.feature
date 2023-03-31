@@ -28,7 +28,7 @@ Feature: Shop admin page
   Scenario: 06 - Check product names and prices
     Given I am on the main shop page
     When I check product attributes on the main page
-    Then The price and name are the same on the product page
+#    Then The price and name are the same on the product page
 
 #  Scenario: 07 - Check prices styles
 #    Given I am on the main shop page
