@@ -30,7 +30,7 @@ public class ShopSteps {
         System.setProperty("webdriver.http.factory", "jdk-http-client");
 
         driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--remote-allow-origins=*");
 
@@ -161,21 +161,36 @@ public class ShopSteps {
                 Product product = new Product();
                 plist.add(product.makeProduct(wlist.get(i)));
 
-                System.out.println(product.name);
-                System.out.println(product.link);
-                System.out.println(product.originalPrice);
-                System.out.println(product.salePrice);
+//                System.out.println(product.name);
+//                System.out.println(product.link);
+//                System.out.println(product.originalPrice);
+//                System.out.println(product.salePrice);
 
             }
-
 
 //        3. Возвращаем список объектов класса Продукт
 //
         return plist;
     }
 
-    @Then ("They are the same on the product page")
-//    TODO: вызываем конструктор продуктов и по каждому продукту ходим внутрь сравнивать заголовок и цены
+    @Then ("The price and name are the same on the product page")
+    public void check_prod_name_and_prices() {
+            List<Product> plist = get_product_attributes();
+
+            for (int i = 0; i < plist.size(); i++){
+                driver.get(Objects.requireNonNull(plist.get(i).getLink()));
+
+                assert plist.get(i).getName() == driver.findElement(By.cssSelector("h1.title")).getText();
+//                Здесь иф на случай отсутствия акционной цены
+                if (driver.findElements(By.cssSelector("del.regular-price")).isEmpty()) {
+                    assert plist.get(i).getOriginalPrice() == driver.findElement(By.cssSelector("span.price")).getText();
+                } else {
+                    assert plist.get(i).getOriginalPrice() == driver.findElement(By.cssSelector("del.regular-price")).getText();
+                    assert plist.get(i).getSalePrice() == driver.findElement(By.cssSelector("strong.campaign-price")).getText();
+                }
+            }
+
+    }
 
 
     @Then ("Zones in those countries are sorted by name from A to Z")

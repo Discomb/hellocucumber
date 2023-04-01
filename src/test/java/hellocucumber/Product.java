@@ -1,5 +1,6 @@
 package hellocucumber;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -15,21 +16,37 @@ public class Product {
 
     public Product makeProduct(WebElement welement){
         Product product = new Product();
-        this.name = welement.findElement(By.cssSelector("h4.name")).getText();
+        product.name = welement.findElement(By.cssSelector("h4.name")).getText();
         if (welement.findElements(By.cssSelector("del.regular-price")).isEmpty()) {
-            this.originalPrice = welement.findElement(By.cssSelector("span.price")).getText();
+            product.originalPrice = welement.findElement(By.cssSelector("span.price")).getText();
         } else {
-            this.originalPrice = welement.findElement(By.cssSelector("del.regular-price")).getText();
+            product.originalPrice = welement.findElement(By.cssSelector("del.regular-price")).getText();
         }
-        this.originalPriceStyle = null;
+        product.originalPriceStyle = null;
         if (welement.findElements(By.cssSelector("strong.campaign-price")).isEmpty()) {
-            this.salePrice = null;
+            product.salePrice = null;
         } else {
-            this.salePrice = welement.findElement(By.cssSelector("strong.campaign-price")).getText();
+            product.salePrice = welement.findElement(By.cssSelector("strong.campaign-price")).getText();
         }
-        this.salePriceStyle = null;
-        this.link = welement.findElement(By.cssSelector("a.link")).getAttribute("href");
+        product.salePriceStyle = null;
+        product.link = welement.findElement(By.cssSelector("a.link")).getAttribute("href");
 
         return product;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getLink(){
+        return this.link;
+    }
+
+    public String getOriginalPrice() {
+        return this.originalPrice;
+    }
+
+    public String getSalePrice() {
+        return this.salePrice;
     }
 }
