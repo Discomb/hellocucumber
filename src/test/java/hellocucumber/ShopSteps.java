@@ -1,17 +1,23 @@
 package hellocucumber;
 
-import com.google.common.collect.Comparators;
 import com.google.common.collect.Ordering;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -68,40 +74,40 @@ public class ShopSteps {
 
 
     @Given("I am on the shop admin login page")
-    public void I_visit_admin_page() {
+    public void iVisitAdminPage() {
         driver.get("http://localhost/litecart/admin/");
     }
 
     @Given ("I am logged into shop admin page")
-    public void login_admin(){
-            I_visit_admin_page();
-            enter_creds();
+    public void loginAdmin(){
+            iVisitAdminPage();
+            enterCreds();
             checkTitle();
     }
 
     @Given("I am on the main shop page")
-    public void I_visit_shop_main_page(){
+    public void iVisitShopMainPage(){
         driver.get("http://localhost/litecart/");
     }
 
     @Given ("I am on the Countries tab of admin page")
-    public void I_visit_Countries_tab(){
-         login_admin();
+    public void iVisitCountriesTab(){
+         loginAdmin();
 
          driver.findElement(By.cssSelector("div#sidebar li[data-code ='countries'] a")).click();
 
-         assert driver.findElement(By.cssSelector("div.card-title")).getText().equals("Countries");
+         Assertions.assertEquals(driver.findElement(By.cssSelector("div.card-title")).getText(), "Countries");
     }
 
     @When ("I go through menu")
-    public List<WebElement> get_menu_elements(){
+    public List<WebElement> getMenuElements(){
             List<WebElement> menuList = driver.findElements(By.cssSelector("div#sidebar li a"));
 
             return menuList;
     }
 
     @When("I enter credentials")
-    public void enter_creds() {
+    public void enterCreds() {
         WebElement element = driver.findElement(By.name("username"));
 
         element.sendKeys("admin");
@@ -115,14 +121,14 @@ public class ShopSteps {
     }
 
     @When ("I look on product images")
-    public List<WebElement> get_products(){
+    public List<WebElement> getProducts(){
         List<WebElement> productList = driver.findElements(By.cssSelector("article.product"));
 
         return productList;
     }
 
     @When ("I check sorting of the countries by name")
-    public List<WebElement> get_countries(){
+    public List<WebElement> getCountries(){
             List<WebElement> countriesList = driver.findElements(By.cssSelector((" tbody tr")));
 
 //        form[name='countries_form']
@@ -132,8 +138,8 @@ public class ShopSteps {
 
     @When ("I check if country has multiple zones")
 //    Отдаем стринговый список имен стран для последующего сравнения
-    public List<String> get_countries_with_zones(){
-            List<WebElement> countriesList = get_countries();
+    public List<String> getCountriesWithZones(){
+            List<WebElement> countriesList = getCountries();
             List<String> countriesWithZones = new ArrayList<>();
 
         for (int i = 0; i < countriesList.size(); i++) {
@@ -147,13 +153,13 @@ public class ShopSteps {
     }
 
     @When ("I check product attributes on the main page")
-    public List<Product> get_product_attributes(){
+    public List<Product> getProductAttributes(){
 
 //        TODO:
 
 
 //        1. Получаем список веб.элементов, которыый содержит всю нужную нам информацию о продукте
-            List<WebElement> wlist = get_products();
+            List<WebElement> wlist = getProducts();
             List<Product> plist= new ArrayList<>();
 
 //        2. Циклом из каждого элемента создаем объект класса Продукт и наполняем его данными.
@@ -174,28 +180,63 @@ public class ShopSteps {
     }
 
     @Then ("The price and name are the same on the product page")
-    public void check_prod_name_and_prices() {
-            List<Product> plist = get_product_attributes();
+    public void checkProdNameAndPricesAndStyles() {
+            List<Product> plist = getProductAttributes();
+            List<String> origStyle = new ArrayList<>();
+            List<String> saleStyle = new ArrayList<>();
 
             for (int i = 0; i < plist.size(); i++){
+                Product product = plist.get(i);
                 driver.get(Objects.requireNonNull(plist.get(i).getLink()));
 
-                assert plist.get(i).getName() == driver.findElement(By.cssSelector("h1.title")).getText();
+                Assertions.assertEquals(product.getName(), driver.findElement(By.cssSelector("h1.title")).getText());
 //                Здесь иф на случай отсутствия акционной цены
                 if (driver.findElements(By.cssSelector("del.regular-price")).isEmpty()) {
-                    assert plist.get(i).getOriginalPrice() == driver.findElement(By.cssSelector("span.price")).getText();
+                    origStyle = getProductPagePricesStyle("span.price");
+                    Assertions.assertEquals(product.getOriginalPrice(), driver.findElement(By.cssSelector("span.price")).getText());
+//                    System.out.println(product.getOriginalPriceStyle());
+//                    System.out.println(origStyle);
+                    Assertions.assertEquals(product.getOriginalPriceStyle(),origStyle);
                 } else {
-                    assert plist.get(i).getOriginalPrice() == driver.findElement(By.cssSelector("del.regular-price")).getText();
-                    assert plist.get(i).getSalePrice() == driver.findElement(By.cssSelector("strong.campaign-price")).getText();
+                    origStyle = getProductPagePricesStyle("del.regular-price");
+                    saleStyle = getProductPagePricesStyle("strong.campaign-price");
+                    Assertions.assertEquals(product.getOriginalPrice(), driver.findElement(By.cssSelector("del.regular-price")).getText());
+                    Assertions.assertEquals(product.getSalePrice(), driver.findElement(By.cssSelector("strong.campaign-price")).getText());
+//                    System.out.println(product.getOriginalPriceStyle());
+//                    System.out.println(origStyle);
+//                    System.out.println(product.getSalePriceStyle());
+//                    System.out.println(saleStyle);
+                    Assertions.assertEquals(product.getOriginalPriceStyle(), origStyle);
+                    Assertions.assertEquals(product.getSalePriceStyle(), saleStyle);
                 }
             }
 
     }
 
+    public List<String> getProductPagePricesStyle(String priceType){
+            List<String> newPriceStylesList = new ArrayList<>();
+//       В лист стилей пихаем font-weight, font-size, color, text-decoration
+            newPriceStylesList.add(driver.findElement(By.cssSelector(priceType)).getCssValue("font-weight"));
+//            newPriceStylesList.add(driver.findElement(By.cssSelector(priceType)).getCssValue("font-size"));
+            newPriceStylesList.add(driver.findElement(By.cssSelector(priceType)).getCssValue("color"));
+            newPriceStylesList.add(driver.findElement(By.cssSelector(priceType)).getCssValue("text-decoration"));
+
+            return newPriceStylesList;
+    }
+
+//    @Then ("They have the same style on product page")
+
+
+
+//    public void comparePricesStyles(List<String> mainPage, List<String> productPage){
+//            System.out.println(mainPage);
+//            System.out.println(productPage);
+//            assert mainPage.equals(productPage);
+//    }
 
     @Then ("Zones in those countries are sorted by name from A to Z")
-    public void check_zones_sorting_by_name() {
-        List<String> countriesList = get_countries_with_zones();
+    public void checkZonesSortingByName() {
+        List<String> countriesList = getCountriesWithZones();
         List<String> zonesNames = new ArrayList<>();
 
         for (int i = 0; i < countriesList.size(); i++ ){
@@ -213,7 +254,7 @@ public class ShopSteps {
 //                System.out.println(zonesList.get(j).getAttribute("value"));
             }
 
-            assert Ordering.natural().isOrdered(zonesNames);
+            Assertions.assertTrue(Ordering.natural().isOrdered(zonesNames));
 
             zonesNames.clear();
 
@@ -223,8 +264,8 @@ public class ShopSteps {
     }
 
     @Then ("Countries sorted by name from A to Z")
-    public void check_countries_sorting_by_name(){
-            List<WebElement> countriesList = get_countries();
+    public void checkCountriesSortingByName(){
+            List<WebElement> countriesList = getCountries();
             List<String> countries = new ArrayList<>();
 
             for (int i = 0; i < countriesList.size(); i++){
@@ -232,12 +273,12 @@ public class ShopSteps {
                 countries.add(country);
             }
 
-            assert Ordering.natural().isOrdered(countries);
+            Assertions.assertTrue(Ordering.natural().isOrdered(countries));
     }
 
     @Then ("I see that every product has only one sticker")
-    public void check_stickers(){
-            List<WebElement> products = get_products();
+    public void checkStickers(){
+            List<WebElement> products = getProducts();
 
             for (int i = 0; i < products.size(); i++){
                 WebElement product = products.get(i);
@@ -250,7 +291,7 @@ public class ShopSteps {
 //                    System.out.println(e.getMessage());
 //                }}
 
-                assert product.findElements(By.cssSelector("div.sticker")).size() == 1;
+                Assertions.assertEquals(product.findElements(By.cssSelector("div.sticker")).size(), 1);
             }
 
     }
@@ -264,10 +305,10 @@ public class ShopSteps {
 
     @Then ("Every title has a header")
     public void checkHeaders() {
-        List<WebElement> elements = get_menu_elements();
+        List<WebElement> elements = getMenuElements();
 
             for (int i = 0; i < elements.size(); i++ ){
-                elements = get_menu_elements();
+                elements = getMenuElements();
                 WebElement element = elements.get(i);
 //                System.out.println(element.findElement(By.cssSelector("span.name")).getText());
                 element.click();
@@ -276,7 +317,7 @@ public class ShopSteps {
 //                catch (InterruptedException e) {
 //                    System.out.println(e.getMessage());
 //                }}
-                assert driver.findElement(By.cssSelector(".card-header")).isDisplayed();
+                Assertions.assertTrue(driver.findElement(By.cssSelector(".card-header")).isDisplayed());
             }
     }
 

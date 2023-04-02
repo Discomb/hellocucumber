@@ -25,14 +25,16 @@ Feature: Shop admin page
     When I check if country has multiple zones
     Then Zones in those countries are sorted by name from A to Z
 
-  Scenario: 06 - Check product names and prices
+  Scenario: 06 - Check product names and prices and styles
     Given I am on the main shop page
 #    When I check product attributes on the main page
     Then The price and name are the same on the product page
 
+
+# Сценарий лишний, стили проверил в 6 сценарии
 #  Scenario: 07 - Check prices styles
 #    Given I am on the main shop page
-#    When I check product attributes on the main page
+##    When I check product attributes on the main page
 #    Then They have the same style on product page
 
 
